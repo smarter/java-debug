@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import com.microsoft.java.debug.core.IDebugSession;
 import com.microsoft.java.debug.core.adapter.variables.IVariableFormatter;
 import com.microsoft.java.debug.core.protocol.Events;
+import com.microsoft.java.debug.core.protocol.Messages.Response;
 
 public interface IDebugAdapterContext {
     /**
@@ -36,9 +37,9 @@ public interface IDebugAdapterContext {
      */
     void sendEventAsync(Events.DebugEvent event);
 
-    void setResponseAsync(boolean async);
-    boolean shouldSendResponseAsync();
-    void sendResponseAsync(Response response);
+    // void setResponseAsync(boolean async);
+    // boolean shouldSendResponseAsync();
+    // void sendResponseAsync(Response response);
 
     <T extends IProvider> T getProvider(Class<T> clazz);
 

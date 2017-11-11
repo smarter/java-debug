@@ -23,6 +23,7 @@ import com.microsoft.java.debug.core.adapter.AdapterUtils;
 import com.microsoft.java.debug.core.adapter.ErrorCode;
 import com.microsoft.java.debug.core.adapter.IDebugAdapterContext;
 import com.microsoft.java.debug.core.adapter.IDebugRequestHandler;
+import com.microsoft.java.debug.core.adapter.IEvaluationProvider;
 import com.microsoft.java.debug.core.adapter.formatter.NumericFormatEnum;
 import com.microsoft.java.debug.core.adapter.formatter.NumericFormatter;
 import com.microsoft.java.debug.core.adapter.formatter.SimpleTypeFormatter;
@@ -43,6 +44,7 @@ import com.sun.jdi.PrimitiveValue;
 import com.sun.jdi.StackFrame;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.Value;
+import com.sun.jdi.*;
 
 public class EvaluateRequestHandler implements IDebugRequestHandler {
     private final Pattern simpleExprPattern = Pattern.compile("[A-Za-z0-9_.\\s]+");
@@ -114,7 +116,7 @@ public class EvaluateRequestHandler implements IDebugRequestHandler {
             response.body = new Responses.EvaluateResponseBody(result,
                     0, "test",
                     0);
-            finalContext.sendResponseAsync(response);
+            // finalContext.sendResponseAsync(response);
         });
         if (!StringUtils.isBlank(test)) {
             response.body = new Responses.EvaluateResponseBody(test,
@@ -127,7 +129,7 @@ public class EvaluateRequestHandler implements IDebugRequestHandler {
                     0);
 
         }
-        context.setResponseAsync(true);
+        // context.setResponseAsync(true);
 
     }
 }
