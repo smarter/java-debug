@@ -14,7 +14,9 @@ package com.microsoft.java.debug.core.adapter;
 import com.sun.jdi.StackFrame;
 import com.sun.jdi.ThreadReference;
 
+import com.microsoft.java.debug.core.adapter.IEvaluationProvider;
+
 public interface IEvaluationProvider extends IProvider {
-    String eval(String code, StackFrame sf, IEvaluationListener listener);
+    String eval(String code, StackFrame sf, IDebugAdapterContext context, IEvaluationListener listener);
     boolean isInEvaluation(ThreadReference thread);
 }

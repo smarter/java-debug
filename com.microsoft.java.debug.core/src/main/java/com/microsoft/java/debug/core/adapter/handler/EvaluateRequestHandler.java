@@ -53,14 +53,16 @@ public class EvaluateRequestHandler implements IDebugRequestHandler {
     public List<Command> getTargetCommands() {
         return Arrays.asList(Command.EVALUATE);
     }
-    public static StackFrame refreshStackFrames(StackFrame sf) {
+    public static StackFrame refreshStackFrames(StackFrame sf, int frameId, IDebugAdapterContext context) {
         try {
             sf.thisObject();
             return sf;
         } catch (InvalidStackFrameException ex) {
              try {
-                for(StackFrame nsf : sf.thread().frames()) {
-                    if (nsf.location().equals(sf.location())) {
+               ThreadReference thread = context.threadOfFrameId().get(frameId);
+               Location location = context.locationOfFrameId().get(frameId);
+                for(StackFrame nsf : thread.frames()) {
+                    if (nsf.location().equals(location)) {
                         return nsf;
                     }
                 }
@@ -106,13 +108,14 @@ public class EvaluateRequestHandler implements IDebugRequestHandler {
             AdapterUtils.setErrorResponse(response, ErrorCode.EVALUATE_FAILURE, "Failed to evaluate. Reason: Cannot evaluate because the thread is resumed.");
             return;
         }
-        StackFrame sf = refreshStackFrames(stackFrameProxy.getProxiedObject());
+        StackFrame sf = refreshStackFrames(stackFrameProxy.getProxiedObject(),
+                                           evalArguments.frameId, context);
         if (sf == null) {
             sf = stackFrameProxy.getProxiedObject();
         }
         IEvaluationProvider engine = context.getProvider(IEvaluationProvider.class);
         final IDebugAdapterContext finalContext = context;
-        String test = engine.eval(expression, sf, result -> {
+        String test = engine.eval(expression, sf, context, result -> {
             response.body = new Responses.EvaluateResponseBody(result,
                     0, "test",
                     0);

@@ -20,6 +20,8 @@ import com.microsoft.java.debug.core.adapter.variables.IVariableFormatter;
 import com.microsoft.java.debug.core.protocol.Events;
 import com.microsoft.java.debug.core.protocol.Messages.Response;
 
+import com.sun.jdi.*;
+
 public interface IDebugAdapterContext {
     /**
      * Send debug event synchronously.
@@ -110,4 +112,7 @@ public interface IDebugAdapterContext {
     void setMainClass(String mainClass);
 
     String getMainClass();
+
+    Map<Integer, ThreadReference> threadOfFrameId();
+    Map<Integer, Location> locationOfFrameId();
 }

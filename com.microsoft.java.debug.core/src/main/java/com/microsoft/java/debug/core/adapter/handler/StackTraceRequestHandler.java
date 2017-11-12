@@ -72,6 +72,8 @@ public class StackTraceRequestHandler implements IDebugRequestHandler {
                     StackFrame stackFrame = stackFrames.get(i);
                     int frameId = context.getRecyclableIdPool().addObject(stackFrame.thread().uniqueID(),
                             new JdiObjectProxy<>(stackFrame));
+                    context.threadOfFrameId().put(frameId, thread);
+                    context.locationOfFrameId().put(frameId, stackFrame.location());
                     Types.StackFrame clientStackFrame = convertDebuggerStackFrameToClient(stackFrame, frameId, context);
                     result.add(clientStackFrame);
                 }

@@ -14,6 +14,7 @@ package com.microsoft.java.debug.core.adapter;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.function.Consumer;
 
@@ -23,10 +24,14 @@ import com.microsoft.java.debug.core.adapter.variables.VariableFormatterFactory;
 import com.microsoft.java.debug.core.protocol.Events.DebugEvent;
 import com.microsoft.java.debug.core.protocol.Messages.Response;
 
+import com.sun.jdi.*;
+
 
 public class DebugAdapterContext implements IDebugAdapterContext {
     private static final int MAX_CACHE_ITEMS = 10000;
     private Map<String, String> sourceMappingCache = Collections.synchronizedMap(new LRUCache<>(MAX_CACHE_ITEMS));
+    private Map<Integer, ThreadReference> _threadOfFrameId = new ConcurrentHashMap<>();
+    private Map<Integer, Location> _locationOfFrameId = new ConcurrentHashMap<>();
     private DebugAdapter debugAdapter;
 
     private IDebugSession debugSession;
@@ -168,6 +173,16 @@ public class DebugAdapterContext implements IDebugAdapterContext {
     @Override
     public Map<String, String> getSourceLookupCache() {
         return sourceMappingCache;
+    }
+
+    @Override
+    public Map<Integer, ThreadReference> threadOfFrameId() {
+        return _threadOfFrameId;
+    }
+
+    @Override
+    public Map<Integer, Location> locationOfFrameId() {
+        return _locationOfFrameId;
     }
 
     @Override
