@@ -13,6 +13,8 @@ package com.microsoft.java.debug.core.adapter;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,7 +97,11 @@ public class ProtocolServer extends AbstractProtocolServer {
             }
         }).whenComplete((r, e) -> {
             if (e != null) {
-                logger.log(Level.SEVERE, "Unexpected exception occurs when sending message to VSCode: %s" + e.getMessage());
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                String sStackTrace = sw.toString();
+                logger.log(Level.SEVERE, "Unexpected exception occurs when sending message to VSCode: %s " + sStackTrace);
             }
         });
     }
