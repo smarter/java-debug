@@ -92,7 +92,7 @@ public class StackFrameProxy implements StackFrame {
 
     @Override
     public Location location() {
-        return getProxy().location();
+        return (Location) invokeProxy("location", null, null);
     }
 
     @Override
